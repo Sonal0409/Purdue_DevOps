@@ -1,0 +1,127 @@
+
+
+Scenario 2:
+*****
+
+Configure a Windows slave
+
+**
+
+Go to Configure Jenkins
+
+Scroll to Jenkins Location
+
+Make sure the Jenkisn URL is same as the current URL of your instance.
+
+**
+
+Go to Configure Global security
+
+Agents ==> make sure the port is random
+
+***
+
+Go to manage nodes and Clouds
+
+Select new node
+
+give name as Windows slave
+
+give descptions as Windows 10
+
+Number of executors = 1
+
+Remote root directory:
+
+ ==> create an empty folder in the C drive
+
+ ==> name the folder as jenkinsdir
+
+ ==> copy the path and add to Remote root directoy on master
+
+C:\jenkinsdir
+
+
+Give Labels : windows_slave
+
+
+Usage : only build jobs that have matching label - second option
+
+
+Launch method : launch the agent by connecting to the controller
+
+Availability : keep this node online as much as possibel
+
+Node properties
+
+select tool location
+
+select git
+
+C:\Program Files\Git\cmd
+
+Click on ADD
+
+Select java
+
+C:\Program Files\Java\jdk1.8.0_301
+
+
+Save the configurations
+
+Node will be in error
+
+click on node name
+
+You will see this information :
+
+
+launch agent Launch agent from browser
+
+Run from agent command line:
+
+java -jar agent.jar -jnlpUrl http://3.128.179.170:8080/computer/WindowsSlave/jenkins-agent.jnlp -secret a16c83c743a261625c39c60e76a84b093223e7a7a78a3aeceacf126121970f83 -workDir "C:\jenkinsdir"
+
+
+
+Download the agent.jar on windows machine
+
+copy the agent.jar in the remote root directory of agent
+
+
+go to the command prompt of windows machine
+go to the remote directory
+
+cd c:\jenkinsdir
+
+copy paste this command
+
+java -jar agent.jar -jnlpUrl http://3.128.179.170:8080/computer/WindowsSlave/jenkins-agent.jnlp -secret a16c83c743a261625c39c60e76a84b093223e7a7a78a3aeceacf126121970f83 -workDir "C:\jenkinsdir"
+
+
+windows slave will connect to master
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
