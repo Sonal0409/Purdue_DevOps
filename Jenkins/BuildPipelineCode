@@ -1,0 +1,68 @@
+pipeline {
+    
+    agent any
+    
+    tools{
+        jdk 'myjava'
+        maven 'mymaven'
+    }
+
+   stages{
+       
+       stage('CloneRepo')
+       {
+           steps{
+               git 'https://github.com/Sonal0409/DevOpsClassCodes.git'
+ 
+           }
+       }
+       
+       stage('Compile')
+       {
+           steps{
+               sh  'mvn compile'
+               
+           }
+       }
+       
+       stage('CodeReview')
+       {
+           steps{
+               sh 'mvn pmd:pmd'
+           }
+           post{
+               success{
+                   recordIssues(tools: [pmdParser(pattern: 'target/pmd.xml')])
+               }
+           }
+       }
+       
+       stage('UnitTesting')
+       {
+           steps{
+               sh 'mvn test'
+           }
+           post{
+               success{
+                   junit 'target/surefire-reports/*.xml'
+               }
+           }
+       }
+       
+       stage('CodeCoverage')
+       {
+           steps{
+               sh 'mvn cobertura:cobertura -Dcobertura.report.format=xml'
+           }
+       }
+       
+       stage('package')
+       {
+           steps{
+               sh 'mvn package'
+           }
+       }
+   }
+   
+   
+}
