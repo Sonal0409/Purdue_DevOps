@@ -1,0 +1,185 @@
+
+
+Scenario 1: 
+
+Adding Linux slave to jenkins master over ssh
+
+*************
+
+Start the master machine
+
+Start the linux slave
+
+ Install git 
+
+ > yum install git -y
+
+Install java
+ 
+> yum install java-1.8.0-openjdk-devel
+
+Install maven
+
+ > yum install maven -y
+
+
+Connect Master to slave
+
+*****
+
+Step 1: Configure tools ===> and the chnage jenkins URL
+
+Step 2:  go to configure global security ==> Scroll down to Agent ==>provide Agent port ==> select Random
+
+Step 3: Manage nodes and clouds
+
+Configuration of Agent - 3 important points:
+****************
+1. You need to give the path of the directory on Agent where workspace has to created by master
+
+On the Agent - perform these steps
+
+   > create an empty directory on slave
+   > note the path of the directory :  /tmp/jenkinsdir20
+   > give read write execute permissions to the directory
+
+On the master -- give the path of the directory
+
+
+
+2. label : giving a tag to the slave
+
+  QA -- 3 servers ==> label all of them as QA_slave
+
+ On the job you will specify label so as to execute it on the agent ==> execute on QA_slave
+
+
+3. launch or connect to the slave
+
+
+ ==> if it is linux slave connect using SSH
+
+ ==> give the private ip of the slave under HOST
+
+ ===> credentials
+
+    ==> username & password on slave and connect using it through jenkins
+
+ OR
+
+  ==> you can use username and AWS pem key to connect
+ 
+       > Select SSH username and private key
+
+give id => id20
+give description ==> linux_slave20
+
+username ==> ec2-user
+
+AddKey ==> add here
+
+
+go to AWS ==> on the linux slave see the key name on extreme right
+
+go to downloads folder of your machine --> search the key file and open it with notepad
+
+==> copy the contents of the notepad and paste it on the master user ENTER DIRECTLY
+
+==> save 
+
+Select the credentials form the drop down now
+
+
+Host Key Verification Strategy ==> Non verifying verification startegy
+
+
+
+Availability ==> keep this agent online as much as possible
+
+Nodes ==> select tool locations
+
+give location for git ==> /usr/bin/git
+
+give localtion for java ===>  /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.302.b08-0.amzn2.0.1.x86_64
+
+
+And save the configuration.
+
+Slave will connect to master successfully
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
