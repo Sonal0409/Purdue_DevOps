@@ -19,8 +19,7 @@ job(jobname){
     
     steps{
       
-        shell('echo $Name'
-             && touch file1)
+        shell('echo $Name')
        
     
       
