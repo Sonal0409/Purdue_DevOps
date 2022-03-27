@@ -10,5 +10,5 @@ for(i in 0..3)
   steps{
    shell ('echo mutiplejobs') 
   }
-  
+}
 }
