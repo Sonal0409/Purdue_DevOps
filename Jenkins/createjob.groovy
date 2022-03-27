@@ -16,6 +16,12 @@ job(jobname){
       scm ('* * * * *')
       cron('* 8 * * *')
     }
+    
+    steps{
+      
+        shell("echo 'Hello World!'")
+      
+    }
         
     }
 }
