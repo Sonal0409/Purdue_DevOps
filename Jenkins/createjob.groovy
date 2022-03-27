@@ -7,7 +7,7 @@ job(jobname){
         choiceParam('SelectTool', ['Jenkins (default)', 'GIT', 'Maven'])
         stringParam('Name', defaultValue='JenkisnServer', description = 'Learning jenkins')
     scm {
-        github('sonal0409/DevOpsCodeDemo', master)
+        github('sonal0409/DevOpsCodeDemo', 'master')
       
     }
         
