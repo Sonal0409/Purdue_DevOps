@@ -1,4 +1,4 @@
-job("maven-compile')
+job("maven-compile")
     {
       scm{
         git('https://github.com/Sonal0409/DevOpsClassCodes.git')
@@ -12,7 +12,7 @@ job("maven-compile')
       }
     }
     
-    job("maven-test')
+    job("maven-test")
     {
       scm{
         git('https://github.com/Sonal0409/DevOpsClassCodes.git')
