@@ -20,7 +20,7 @@ job(jobname){
     steps{
       
         shell("echo 'Hello World!'")
-      shell("echo ${params.Name}")
+    
       
     }
         
