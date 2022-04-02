@@ -1,0 +1,386 @@
+
+Using jenkins we have to Deploy a war file on tomcat server
+
+
+Jenkins --> compile --> unit testing ---> Package(.war file)
+
+Using jenkins we have to take this .war file and deplpy it on a webserver
+
+Webserver : tomcat
+
+Step 1: Create server on which we have to install tomcat 8
+
+Step 2: Create another server on which jenkins is installed
+
+Step 3: We will create a free style job to deploy the package on a tomcat server
+
+plugin : deploy on container
+
+Step 4: we will create a pipeline job, in which we will write code to deploy on tomcats erver
+
+plugin : ssh agent
+
+
+
+Steps for deployment on a webserver:
+
+
+ > on a server you are goign to install webserver
+
+ > Start the tomcat service or start the webserver
+
+ > Copy .war file (package) into the webapps directory of tomcat
+
+ > restart tomcat -> so that application is deployed successfully
+
+Access the web application
+
+ publicip:8080/packagename
+
+
+https://github.com/Sonal0409/DevOpsClassCodes
+
+
+
+
+Step 1: Create server on which we have to install tomcat 8
+
+
+Pre-req: Install java8 on the server
+
+Install tomcat
+
+$ cd /opt
+
+$ wget https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.78/bin/apache-tomcat-8.5.78.tar.gz
+
+$ tar -xvzf apache-tomcat-8.5.78.tar.gz
+
+$ mv apache-tomcat-8.5.78.tar.gz tomcat
+
+$ cd tomcat
+
+$ cd bin
+
+$ ./startup.sh   ==> tomcat will be up and running
+
+go to browser
+
+public ip:8080  ==> you will see tomcat
+
+
+Do the desired config changes in context.xml file for access manager APP
+
+
+Apply the changes in these 2 context.xml file of tomcat
+
+
+vim /opt/tomcat/webapps/host-manager/META-INF/context.xml
+vim /opt/tomcat/webapps/manager/META-INF/context.xml
+
+
+comment this line in the contxt.xml
+
+<Valve className="org.apache.catalina.valves.RemoteAddrValve"
+         allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />
+
+commented in both the files
+
+  <!--  <Valve className="org.apache.catalina.valves.RemoteAddrValve"
+  allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" /> -->
+
+
+Create roles & credentials
+****
+
+$ cd conf
+
+$ vim tomcat-users.xml
+
+at the end before </tomcat-users> add these roles
+
+ <role rolename="manager-gui"/>
+ <role rolename="manager-script"/>
+ <role rolename="manager-jmx"/>
+ <role rolename="manager-status"/>
+ <user username="admin" password="admin" roles="manager-gui, manager-script, manager-jmx, manager-status"/>
+ <user username="deployer" password="deployer" roles="manager-script"/>
+ <user username="tomcat" password="s3cret" roles="manager-gui"/>
+
+
+Save the file
+
+$ cd bin
+
+$ ./shutdown.sh
+
+$ ./startup.sh
+
+
+publicip:8080
+
+click on managerapp
+
+username: tomcat
+password:s3cret
+
+you can now see the manager app
+
+
+
+Step 2: Create another server on which jenkins is installed - complete
+
+
+Start jenkins
+
+publicip:8080
+
+
+Install a plugin : Deploy to container Plugin
+
+Create a free style job
+
+give the repo name
+
+give the trigger
+
+build step --> invoike top level maven target 
+
+goal as : clean install package
+
+Post build actions
+
+select deploy war/ear on container
+
+WAR/EAR files : **/*.war
+
+Containers:
+
+click on add container--> select tomcat 8
+
+Select credentials
+
+and give tomcat URL
+
+Build the job
+
+Deployment complete
+
+****************************************
+
+
+Pipeline as code:
+
+Give permissions to ec2-user to make chnages to webapps directory
+
+chown -R ec2-user:ec2-user /opt
+
+Download a plugin that will connect to tomcat server form jenkins
+
+ plugin: ssh agent
+
+Using ssh copy the war file in the tomcat webapps directory
+
+sh 'scp /var/lib/jenkins/workspace/TomcatDeploypipeline/target/addressbook.war  ec2-user@3.129.17.201:/opt/tomcat/webapps'
+
+ command:  scp filenamelocation username@publicip:Destinationpath
+
+
+
+to do this step
+
+we need a plugin
+
+ssh agent
+
+  it connects to you tomcat server through jenkins using ssh
+
+   username : ec2-user
+
+   pem file
+
+copy the war file in the tomcat webapps directory
+
+
+
+
+Pipeline Code:
+
+pipeline{
+    
+    agent any
+    tools{
+        jdk 'myjava'
+        maven 'mymaven'
+    }
+    
+    stages{
+        stage('cloneRepo'){
+            steps{
+                git 'https://github.com/Sonal0409/DevOpsClassCodes.git'
+            }
+        }
+        stage('package')
+        {
+            steps{
+                sh 'mvn clean install package'
+            }
+        }
+        
+        stage('Deploy on tomcat'){
+            steps{
+                
+                sshagent(['idnew']) {
+     sh 'scp -o StrictHostKeyChecking=no /var/lib/jenkins/workspace/TomcatDeploypipeline/target/addressbook.war  ec2-user@3.129.17.201:/opt/tomcat/webapps'
+}
+                
+            }
+            
+        }
+    }
+}
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
