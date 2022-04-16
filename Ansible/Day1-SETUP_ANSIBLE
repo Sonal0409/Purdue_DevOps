@@ -1,0 +1,418 @@
+
+Day1 : Notes
+
+******************
+
+Infrastructure
+
+Configuration Management tool: Ansible, puppet, chef
+
+managing your resources automatically
+
+automatically deploying your application on multiple servers
+
+Docker & kube
+
+container & its orchestration
+
+
+Ansible
+opening port 8080 on 100 server
+
+configure 100 VMs on AWS
+
+
+100 VMS ready
+
+install docker
+
+CM tool - ansible --> install docker on 100 server
+
+kubernetese - cluster - containers on these 100 server
+
+
+CM tools can be intergrated with jenkins to provide you CICD pipeline
+
+
+******************************
+
+1. inventory file : default localtion : /etc/ansible/hosts
+
+where ansible will maintain list of host servers where configuration changes are to be made
+
+Users can also make there own inventory file at any location
+
+2 types of inventory files
+
+ > static inventory : user will manually enter hostname/ip adress of every server
+ > dynamic inventory : inventory which is automatically created with help ansible plugins and is created for cloud servers
+
+2. Modules : 
+
+ small python program which when executed will automatically apply chnages on the desired host servers
+
+for eg:
+
+module:
+
+ file
+  path: /etc/file1.txt
+  content: "hello All"
+
+
+**************************
+
+
+Installation of Ansible:
+
+************
+
+Step 1: Create an ec2 machine which will Controller machine
+
+$ sudo amazon-linux-extras install epel
+
+$ yum install ansible -y
+
+$ ansible --version
+
+
+Step2: ssh connection
+***********************
+These steps to be exeucted on every machine : master & slave both
+
+passwordless authentication between master and slave
+
+$ vim /etc/ssh/sshd_config
+
+add # PasswordAuthentication no
+remove # PasswordAuthentication yes
+
+
+Already in AWS ec2 machine there is a user called as ec2-user, we will use this user in ansible
+
+create a password for ec2-user to use password for copying the ssh key on slave
+
+
+
+$ passwd ec2-user
+
+enter password
+
+
+this ec2-user should have permissions to make changes
+add the user to sudoers
+
+$ vim /etc/sudoers
+
+add this under root
+
+ec2-user ALL=NOPASSWD: ALL
+
+
+$ systemctl restart sshd
+
+
+
+Steps to be executed on Master Only (ACM):
+***********************
+
+$ su - ec2-user
+
+$ ssh-keygen
+
+press enter 3 time
+
+key will be generated
+
+cop the key on every slave
+
+$ ssh-copy-id privateipSlave
+
+$ ssh-copy-id 172.31.21.30
+
+private ip of slaves:
+172.31.21.30
+172.31.22.178
+
+Give the password for ec2-user on the slave machine that has been set earlier steps.
+
+************************************************************
+
+
+lets us set up the hosts file
+
+Host file is an inventory file available on the master
+
+by default its name is hosts
+
+you can create your custome hostfile also
+
+in this file we give hostname/ipaddress of the salves where chnages to be applied
+
+it will be on the master machien only
+
+its default location is /etc/ansible/hosts
+
+
+$ cd /etc/ansible
+
+
+$ sudo vim hosts
+
+in the inventory file, you can provide hosts information like:
+
+directly giving hostname or ips
+
+Ungrouped hosts
+
+## green.example.com
+## blue.example.com
+## 192.168.100.1
+## 192.168.100.10
+
+
+OR
+
+you can create group
+
+[groupName]
+
+ipaddress
+hostname
+
+eg:
+
+[javaApp]
+## 192.168.100.1
+## 192.168.100.10
+
+[webserver]
+## green.example.com
+## blue.example.com
+
+OR
+
+
+[myapp:childern]
+[javaApp]
+[webserver]
+
+
+
+Command in ansible to check if ACM is able to communicate with slave machine
+
+module ping ==> pong
+
+
+$ ansible 172.31.21.30 -m ping
+
+$ ansible -i inventorfile webserver -m ping
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
