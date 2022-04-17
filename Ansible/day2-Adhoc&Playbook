@@ -1,0 +1,487 @@
+
+
+
+Command in ansible to check if ACM is able to communicate with slave machine
+
+module ping ==> pong
+
+
+$ ansible 172.31.21.30 -m ping
+
+$ ansible -i inventorfile webserver -m ping
+
+
+
+From any location:
+
+$ ansible all -m ping ===> it will look for inventory file by default in location /etc/ansible/hosts
+
+
+if you create your own inventory file and you want ansible to use that inventory
+
+
+ 1.==> you need to update the ansible.cfg file with the path of your inventory
+
+OR
+
+ $ ansible -i /path/inventory groupname -m modulename
+
+*******************************
+
+Ad-Hoc commands
+
+1. command module
+
+ > is used to execute any linux command on the host machine
+
+ > pass the command as an arguement to this module
+
+$  ansible webserver -m command -a "uptime"
+
+$  ansible appserver -m command -a "df -h"
+
+
+
+2. Shell module
+ 
+ > is used to execute any linux command on the host machine
+
+ > pass the command as an arguement to this module
+
+$ ansible webserver -m shell -a "uptime"
+
+3. Copy module
+
+$ ansible myservers -m copy -a "src=./* dest=/tmp"
+
+Copy module can also be used to create a file on the hosts machines
+
+$ ansible myservers -m copy -a "content='hello from ACM' dest=/tmp/hello.txt"
+
+4. Ansible facts
+
+you can get the facts of the all hosts using a module called as setup
+
+Ansible fact variable = value
+
+
+
+
+
+
+******************************
+
+
+
+YAML syntax:
+
+key: value
+
+---
+
+company: edureka
+course: devops
+version: 1.5
+prince: 200
+is_public: true
+trainers:
+ - sonal
+ - ravi            ---> list of values
+ - shubham
+days: ["weekday","weekend"]  ----------------> array list
+trainer_details:
+ - {name: "sonal",email: "admin@gmail.com",role: "trainer"}
+ - {name: "ravi",email: "admin@gmail.com",role: "trainer2"}
+
+trainer_details2:
+- name: sonal                   ---> maps
+  email: admin@123
+  role: trainer1
+- name: ravi
+  email: admin@1234
+  role: trainer2
+- name: shubham
+  email: admin@1234
+  role: trainer3
+
+
+*************************************
+
+playbooks: used to apply multiple modules on the desired host machine
+
+---
+- hosts: webserver
+  tasks:
+  module1: arg1=value arg2=["val1","val2"]
+  module2: 
+   arg1:
+    - val1
+    - val2
+    - val3
+  
+
+1. a module will have paramters
+2. a parameter will have multiple values that cna be passed as a list of values
+
+A playbook can be written anywhere, but by default you can wirte in /etc/ansible directory
+
+
+
+write playbook to do following tasks:
+
+Install tomcat webserver
+module :  yum
+
+Start tomcat service
+module: service
+
+Deploy a war file on tomcat server
+
+get_url: get the file present on given source URL and copy it on the destination
+
+src:
+https://tomcat.apache.org/tomcat-7.0-doc/appdev/sample/sample.war
+
+dest: /usr/share/tomcat/webapps
+
+
+restart tomcat
+module: service
+
+
+---
+- hosts: webserver
+  become: true
+  become_user: root
+  tasks:
+  - name: Install tomcat
+    yum: name=tomcat state=present
+  - name: Start tomcat service
+    service: name=tomcat state=started
+  - name: deploy the war file on tomcat server
+    get_url:
+     url=https://tomcat.apache.org/tomcat-7.0-doc/appdev/sample/sample.war
+     dest=/usr/share/tomcat/webapps
+  - name: restart tomcat server
+    service: name=tomcat state=restarted
+
+
+Check sysntax of yaml in playbook
+
+ansible-playbook playbook1.yml --syntax-check
+
+Execute playbook
+
+ansible-playbook playbook1.yml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
