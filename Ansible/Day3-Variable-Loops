@@ -1,0 +1,272 @@
+1. Debug Module
+
+attribute :
+ > msg  : print the value
+ > var : print the variable value
+ > verbosity : output details
+
+
+
+Variables:
+
+ > custom variable --> user defined variables
+ > ansible special variables--> pre defined variables
+
+Variable to be used: to store the data , if data is to be used again and again
+it is better to store the data in a variable and refer the variable whenever req in the plabook
+
+Names of variables can be: letters,numbers & underscores(_)
+
+shouldnot include: python keywords & ansible or playbook keywords as the name of your playbook
+
+In ansible we create a block in playbook called as vars
+in this block we define all the variables and its values
+
+vars:
+  my_name: "sonal"
+  _age: 24
+  trainer: true
+  1version: 2.3
+
+
+refer the variable in playbook tasks
+
+ {{variable_name}}
+
+
+Scenario 1 : create variables & provide values in the playbook itself
+
+
+---
+- hosts: webserver
+  become: true
+  become_user: root
+  vars:
+   pkg_name: tomcat
+   war_url: https://tomcat.apache.org/tomcat-7.0-doc/appdev/sample/sample.war
+   dest_path: /usr/share/tomcat/webapps
+  tasks:
+  - name: Install {{pkg_name}}
+    yum: name={{pkg_name}} state=present
+  - name: Start tomcat service
+    service: name={{pkg_name}} state=started
+  - name: deploy the war file on tomcat server
+    get_url:
+     url={{war_url}}
+     dest={{dest_path}}
+  - name: restart tomcat server
+    service: name={{pkg_name}} state=restarted
+
+
+Scenario 2: define the variable in the playbook, give the value at runtime as a prompt
+
+vars_prompt : ansible will prompt the user to enter the variable value at runtime
+
+- name: variable value at runtime
+  hosts: webserver
+  become: true
+  vars_prompt:
+   - name: pkg_name
+     prompt: Enter the package name
+     private: false
+   - name: service_name
+     prompt: Enter the service name
+     private: true
+  tasks:
+   - name: Install a package
+     yum: name={{pkg_name}} state=present
+   - name: Start the service
+     service: name={{service_name}} state=started
+
+
+Scenario 3: 
+
+Define a variable storing multiple values
+
+variable value as a list
+
+You can define variables with multiple values using YAML lists. For example:
+
+region:
+  - northeast 
+  - southeast 
+  - Midwest 
+
+
+Referencing list variables
+
+When you use variables defined as a list (also called an array), you can use individual, specific fields from that list. The first item in a list is item 0, the second item is item 1. For example:
+region: "{{ region[1] }}"
+
+The value of this expression would be “northeast”.
+
+
+variable value as a map:
+
+Dictionary variables
+
+A dictionary stores the data in key-value pairs. Usually, dictionaries are used to store related data, such as the information contained in an ID or a user profile.
+Defining variables as key:value dictionaries
+
+You can define more complex variables using YAML dictionaries. A YAML dictionary maps keys to values. For example:
+foo:
+  field1: one
+  field2: two
+
+Referencing key:value dictionary variables
+
+When you use variables defined as a key:value dictionary (also called a hash), you can use individual, specific fields from that dictionary using either bracket notation or dot notation:
+foo['field1'] -one
+foo.field1
+
+
+Define the variables & its value in a file
+
+we are goign get the variable value in plybook through the file
+
+varaibles.yml
+
+pkgs:
+ - git
+ - nano
+ - wget
+
+pkgs2:
+ centos: httpd
+ ubuntu: apache2
+
+user_detail:
+  username: sonal
+  number: 001234567
+
+playbook.yml
+
+to call variables in a playbook from a file
+
+vars_files will be used
+
+
+- name: variable value at runtime
+  hosts: webserver
+  become: true
+  gather_facts: false
+  vars_files:
+   - myvariables.yml
+  tasks:
+   - name: Install a package
+     yum: name={{pkgs[0]}} state=present
+   - name: Start the service
+     service: name={{pkgs2.centos}} state=started
+   - name: print user details
+     debug:
+      msg:
+       - "the name of the user is {{user_detail.username}}"
+       - " the number of the user is {{user_detail.number}}"
+
+
+
+fact variables , how to use them in playbooks
+
+ansible_hostname
+ansible_distribution
+ansible_architecture
+
+refer fact variables in asnible playbook : {{ansible_architecture}}
+
+special variables, how to use them in playbook
+
+inventory_hostname
+
+
+refer special variables in asnible playbook : {{inventory_hostname}}
+
+- hosts: webserver
+  tasks:
+  - name: print fact variable and values
+    debug:
+     msg:
+      - "this os distibution is {{ansible_distribution}}"
+      - " the os name is : {{ansible_system}}"
+      - " the os family is : {{ansible_os_family}}"
+  - name: print the value for special variable
+    debug:
+     var: inventory_hostname
+
+
+IF condition : when keyword
+
+
+- hosts: webserver
+  become: true
+  tasks:
+  - name: Install httpd package
+    yum: name=httpd state=present
+    when: ansible_os_family != "Debain"
+  - name: install apache2 package
+    apt: name=apache2 state=present
+    when: ansible_os_family == "Debain"
+
+Register module:
+
+- hosts: webserver
+  become: true
+  tasks:
+  - name: display bash version
+    shell: "bash --version"
+    register: bash_version
+  - name: print bash_version
+    debug:
+     var: bash_version.stdout.split("\n")
+
+When condition, register & variables
+
+- name: Check if dir d is present if it is not present create a directory d
+  hosts: webserver
+  tasks:
+   - name: Check if mydir directory is present
+     stat:
+      path: /tmp/mydir
+     register: results
+   - name: display results of stat module
+     debug:
+      var: results
+   - name: Create directory if mydir is not present
+     file:
+      name: /tmp/mydir
+      state: directory
+     when:
+      results.stat.exists == false
+   - name: list the files in tmp directory
+     command: ls -al /tmp
+     register: list_dir
+   - name: print variable list_dir
+     debug:
+      var: list_dir
+
+
+Loops with variables & ignore_errors
+
+- hosts: webserver
+  become: true
+  tasks:
+  - name: user creation
+    user:
+     name: "{{item.a}}"
+     home: "{{item.b}}"
+    loop:
+     - {a: Bob1,b: 435345tmp4324343/bob1}
+     - {a: jack,b: 435tmp44435345/jack}
+  - name: list files of directory
+    command: ls -al /tmp/3243544dsfdsfg
+  - name: creat files/directories in user hom dir
+    file:
+     name: "{{item.n1}}"
+     state: "{{item.s1}}"
+    loop:
+     - {n1: /tmp/bob1/file1,s1: touch}
+     - {n1: /tmp/jack/dir1,s1: directory}
+
+
+
+
+
