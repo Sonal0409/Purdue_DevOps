@@ -1,0 +1,207 @@
+
+
+ Ansible roles:
+
+User will create a roles directory
+
+defualt roles directory : /etc/ansible/roles
+
+in this directory- user will create his own role
+
+using ansible galaxy you will create a role
+
+$ ansible-galaxy init apache
+
+role is created --> directory structure -> frmawork, in which you write your playbook sections
+
+$ cd apache
+
+$ ls
+
+following directories will be present with following yaml files
+
+> default
+  > main.yml  // empty file
+
+> vars
+  > main.yml 
+ 
+> metadata
+   > main.yml
+
+> files
+
+> templates
+
+> tasks
+   > main.yml
+
+> handlers
+  >main.yml
+
+> tests
+  > inventory
+  > main.yml
+
+
+$ cd /etc/ansible/roles
+
+create a role:
+
+$ sudo ansible-galaxy init apache
+
+- Role apache was created successfully
+
+$ ls
+
+$ cd apache
+
+delete extra directories not needed for this role
+
+$ sudo rm -rf meta defaults templates tests
+
+Install tree to view the directory structure:
+
+$ yum install tree -y
+
+$ tree
+
+
+1. Create a file in files directory
+
+vim files/index.html
+
+2. Create variables in vars directory
+
+
+sudo vim vars/main.yml
+
+pkg_name: httpd
+dest_path: /var/www/html
+
+3. sudo vim tasks/main.yml
+
+---
+# tasks file for apache
+#
+
+
+- name: Install {{pkg_name}}
+  yum: name={{pkg_name}} state=present
+- name: Start {{pkg_name}}
+  service: name={{pkg_name}} state=started
+- name: Deploy html file on remote hosts
+  copy: src=index.html dest={{dest_path}}
+  notify: restart httpd
+
+
+4. sudo vim handlers/main.yml
+
+---
+# handlers file for apache
+
+
+  - name: restart {{pkg_name}}
+    service: name={{pkg_name}} state=restarted
+
+
+
+
+Execute the role:
+*******
+
+create a new playbook in /etc/ansible
+
+sudo vim role_playbook.yml
+
+
+- hosts: webserver
+  become: true
+  gather_facts: false
+  roles:
+   - apache
+
+
+
+Example 2: roles with jinja2 templates
+*****************
+
+$ sudo vim templates/demor.j2
+
+Welcome to  {{ansible_hostname}}
+
+This file was created on {{ansible_date_time.date}}
+
+Contact {{system_manager}} if anything is wrong
+
+$ sudo vim vars/main.yml
+
+---
+# vars file for demor
+#
+
+system_manager: admin@gmail.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
