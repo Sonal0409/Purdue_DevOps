@@ -12,6 +12,10 @@ On Ubuntu
 Once the above is done, install boto
 
 	$ sudo pip install boto boto3
+	
+
+**Boto and Boto3 are SDK used by AWS that allows python to communicate with AWS API**
+
 Once the above is done we also have to provide AWS user credentials. You can export the AWS Access and Secret Key environment variables
 
 export AWS_ACCESS_KEY_ID='AK123'
