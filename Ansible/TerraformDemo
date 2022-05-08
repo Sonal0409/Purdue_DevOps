@@ -1,0 +1,317 @@
+
+Terraform
+
+Infrastructure as a Code
+
+  > Provider   
+
+  destination where your infrastructure has to be created
+
+eg: AWS, Azure, GCP, kube, Github, Oracle, digital ocean
+
+
+ > Resource 
+
+  what is to be created on the destination
+
+ eg: Ec2, s3 bucket, IAM, load balancers, network, subnet, secutrity gateway, elastic ip, dinamo DB, EBS
+
+
+  > Plan
+
+  steps to be exeucted to create the resource on the provider
+
+  > graph
+
+
+  > terraform Registry:
+
+
+   library with terraform provider details and code/documentation on how to create resources on the provider
+
+
+Installation of Terraform:
+
+************
+
+
+On Linux machine
+_________________
+
+wget https://releases.hashicorp.com/terraform/1.0.2/terraform_1.0.2_linux_amd64.zip
+
+unzip terraform_1.0.2_linux_amd64.zip
+
+mv terraform /usr/local/bin
+
+terraform
+
+
+On Windows Machine:
+___________________
+
+
+Go to https://www.terraform.io/downloads.html Scroll downto Windows package Click on 64-bit
+
+It will download the terraform zip file in downloads folder
+
+Now create a folder with name as Binaries in C drive Unzip the terrform file in the Binaries folder 
+
+The terraform.exe file will be availablein the binaries folder.
+
+Right click on myPC--> go to properties--> search for environment variables 
+
+Click on Path Variable and click on New , add the path C:\Binaries
+
+to validate correct installation of terraform
+
+go to cmd prompt --> type terraform
+
+
+
+You can install ATOM - editor to write terraform code and ansible code
+
+https://atom.io/
+
+Install and set up Atom on windows machine
+
+Install the package : language-terraform
+
+
+
+Create a folder
+create a file
+
+ > awasprovider.tf
+
+provider "aws" {
+  region = "us-west-2"
+  access_key = "AKIAQN2UCWBUGZR7GG24"
+  secret_key = "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"
+}
+
+
+
+Save the file
+
+
+Terraform needs a aws provider plugin for it to create resources on AWs
+
+ $ terraform init
+
+
+
+Create new file for resource creation
+
+ > ec2resource.tf
+
+resource "aws_instance" "myec2" {
+  ami = "ami-0ca285d4c2cda3300"
+  instance_type = "t2.micro"
+  tags = {
+    Name = "TerraformInstance"
+  }
+}
+
+
+$ terrafrom apply
+
+
+Provisioners:
+
+ > remote-exec
+
+The purpose of this provisioner is to connect to your ec2 machine and execute any command or script on the ec2 machine
+
+
+ 2 parts of this provisioner:
+
+   connection : connect to ec2 machine over ssh
+   command : list of commands to be executed
+
+
+Provisioner example:
+
+
+resource "aws_instance" "myec2" {
+  ami = "ami-0ca285d4c2cda3300"
+  instance_type = "t2.micro"
+  key_name = "08May"
+  tags = {
+    Name = "TerraformInstance"
+  }
+  provisioner "remote-exec" {
+     inline = [
+      "sudo amazon-linux-extras install -y nginx1.12",
+      "sudo systemctl start nginx",
+      "touch /tmp/file1"
+
+     ]
+    connection {
+    type     = "ssh"
+    user     = "ec2-user"
+    private_key = file("./08May.pem")
+    host     = self.public_ip
+  }
+   }
+}
+
+
+
+Elastic Ip example:
+
+
+resource "aws_instance" "myec2" {
+  ami = "ami-0ca285d4c2cda3300"
+  instance_type = "t2.micro"
+  key_name = "08May"
+  tags = {
+    Name = "TerraformInstance"
+  }
+  provisioner "remote-exec" {
+     inline = [
+      "sudo amazon-linux-extras install -y nginx1.12",
+      "sudo systemctl start nginx",
+      "touch /tmp/file1"
+
+     ]
+    connection {
+    type     = "ssh"
+    user     = "ec2-user"
+    private_key = file("./08May.pem")
+    host     = self.public_ip
+  }
+   }
+}
+# 2nd resource: elastic IP
+resource "aws_eip" "ep1" {
+  vpc      = true
+}
+# once the eip resource is created, print the output public ip on console
+# print attribute value of a resource,
+# resourcename.userdefiendName.attribute
+output "eip" {
+value = aws_eip.ep1.public_ip
+}
+
+# 3rd resource : associate elastic ip to your ec2 instance
+# here instance id is nothing but : id of aws ec2 instance created
+# syntax: resource.userdefinedName.id
+# here allocation id: elastic ip id created on aws
+# syntax: resource.usergivenName.id
+resource "aws_eip_association" "eip_ec2" {
+  instance_id   = aws_instance.myec2.id
+  allocation_id = aws_eip.ep1.id
+}
+
+
+Variables block
+
+
+variable "imageName"{
+default = "ami-0ca285d4c2cda3300"
+}
+
+variable "instanceType"{
+default = "t2.micro"
+}
+
+variable "access_key1"{
+
+}
+variable "secret_key1"{
+
+}
+
+
+tfvars file
+
+terraform.tfvars
+
+access_key1 = "AKIAQN2UCWBUGZR7GG24"
+secret_key1 = "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"
+
+instanceType= "t2.large"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
