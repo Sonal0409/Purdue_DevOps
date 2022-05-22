@@ -1,0 +1,296 @@
+Hello everyone!
+***********
+Trainer: Sonal Mittal
+***********
+
+Recap:
+
+Git add & commit workflow to LR
+
+Git modify workflow to LR
+
+Git delete workflow
+
+.gitignore
+
+github remote repo Creation
+
+Personal Access token creation
+
+git push workflow
+
+
+Agenda:
+
+**************
+
+> git branch & merging
+
+> git rebase
+
+> git pull & fetch workflow
+
+> git conflicts
+
+> git stashing
+
+> git tags
+
+
+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
+
+
+
+GITHUB pull workflow
+********************
+
+Create a File in github
+
+> on Github ==> click on Add file button ==> create a new file 
+
+give a name to the file==> add content ==> commit the file
+
+Now pull the file to your local repo
+
+$ git pull origin master
+
+pull ==> fetch changes & commit + merge them to LR & working directory
+
+
+GITHUB Fetch workflow
+***********************
+
+Just check(Read only) are there any new commits on the remote master branch that are not in my local
+
+
+  $ git fetch origin master
+
+it will fetch commits ==> metadata  but will not merge with your LR or WD
+
+$ git checkout origin/master -m /path/to/file
+
+
+
+Conflicts and reolve conflicts:
+
+***************************
+
+1. Create file in remote repo-- replicating file contributed by MARC
+
+  Name of file : login
+   
+
+  made chnages to it & commited in to remote repo
+
+
+2. go to LR
+
+create a file --> login  add some chnages 
+
+git add .
+
+git commit -m "done on LR"
+
+3. Push your chnages to remote
+
+
+$ git push origin master
+
+
+  your push will be REJECTED as there are changes on remote in same file
+
+
+4. pull the changes from remote
+
+ $ git pull origin master
+
+
+  You get Merge Conflicts
+
+
+5. Resolve the conflicts and commit the changes
+
+  manually resolve the conflicts
+
+
+ vim login
+
+ remove the special charcters like HEAD , ===, commit at the end
+
+save the file
+
+ do a commit to complete the merge
+
+ $ git commit -a -m "done merging"
+
+
+Branching & Merging:
+
+***********************
+
+Command to check different branhces on your repo
+
+
+$ git branch
+
+
+
+2. Create a new branch:
+
+
+  git branch <nameofbranch>
+
+  git branch b1   ==> create a new branch for you
+
+  git branch
+
+3. Switch to the b1 branch
+
+  $ git checkout b1
+
+4. Create commit on the f1 branch
+
+    touch feature1
+    git add .
+    git commit -m "on f1 branch"
+
+5. Switch back to Master branch
+
+
+   $ git checkout master
+
+6. Merge the feature branch chnages to master branch
+
+
+   $ git merge <feature branch> <masterbranch>
+
+$ git branch -d f1
+
+7. Command to create a branch and switch to the branch
+
+
+  $ git checkout -b dev
+
+8. Switch to Master branch
+
+
+  $ git checkout master
+
+
+9. then sleect only 1 commit and merge the chnages to master
+
+
+ $ git cherry-pick commitid1 commitid1 commitid1
+
+lets delete the branch with certain commits that are not merged
+
+$ git branch -D dev
+
+
+10 Create a branch on local and push the branch to remote
+
+
+
+
+11. Merging will happen remote with reviewers assigned
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
