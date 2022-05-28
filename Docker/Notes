@@ -1,0 +1,222 @@
+
+
+Dockerfile:
+****************
+
+It is a simple text file
+
+the name of the file is going be always 'dockerfile' OR 'Dockerfile'
+
+It is a file that consist of instructions or commands needed to build an Image
+
+ dockerfile ---> Build ---> Image
+
+Format of dockerfile
+********
+
+Instruction argument
+
+keywords or instructions in dockerfile
+
+1.comment
+
+# this is a comment
+
+2. FROM 
+
+** every docker file will start with a FROM keyword, only one FROM in a dockerfile
+
+- specifies the base image from which you are building your custom Image
+
+for eg: 
+
+FROM ubuntu
+
+
+3. RUN
+
+ - use to run any linux command in the image
+ - create file/directory or to install, uninstall, uprgrade package
+ - multiple RUN can be there in a dockerfile
+
+for eg:
+
+ RUN yum install tomcat -y
+
+
+4. CMD
+
+ - specifies a command to executed when container is created
+
+for eg:
+
+ CMD ["run" "catalina.sh"] == start tomcat server
+
+
+  
+5. ENTRYPOINT
+
+ - specifies the default process of the container that should run on container launch
+
+6. VOLUME
+
+  -- specifies the container directory to preserve data on docker host
+
+
+for eg:
+
+  VOLUME /var/www/html  == data is to be preserved on the docker host ==> docker will take care of creating a mount point
+
+7. EXPOSE
+
+   -- specifies the container port where the application is available
+
+8. COPY : copy the files from host machine to container directory
+
+  for eg:
+
+  COPY <host source file> <conatinerdest>
+  
+  COPY index.html /var/www/html
+
+
+9. ADD:
+     copy the files from host machine to container directory
+     Copy the compressed tar file from host machine  as a uncompressed file to container directory
+     COPY files from a remote URL to your container directory
+
+10. ENV:
+
+- specifies environment variables to be used in dockerfile
+
+  for eg:
+
+   ENV packageName nginx1.2
+
+   RUN yum install $packageName -y
+
+11. WORKDIR
+
+- speciifes the directory where all the instruction/commands of dockerfile has to be executed
+
+ > by default the workdir for a container is /
+
+for eg:
+
+ workdir /myapp
+
+ 
+Label : metadata
+
+
+Dockerfile Examples:
+
+FROM ubuntu
+RUN apt-get update
+RUN apt-get install git -y
+
+
+Build dockerfile into an image
+
+ > docker build -t Imagename:tagname .
+
+when you build a dockerfile--> each instruciton will be built into a filesystem
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
