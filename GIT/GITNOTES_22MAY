@@ -199,6 +199,242 @@ $ git branch -D dev
 12. Create a branch on remote repo to add collabrators to remote repo
 
 
+git cherryPick
+********
+
+
+it is command which can merge specific commits to your destination branch
+
+$ git checkout master ==> switch to the branch where we want to the merge
+$ git cherry-pick <commitid> ==> only that particulr chnages will be merged to the master branch
+
+
+
+
+
+
+Scenario 1: Git Clone
+
+
+
+Scenario 2: SSH passwordless authentication
+
+Passwordless Authentication with GIT and GITHUB using SSH
+*******************************
+
+Authorization:
+Connect your local machine with our github account using SSH:
+
+$ ssh-keygen
+[Press enter 3 times]
+
+$ cat ~/.ssh/id_rsa.pub
+[COPY THE PUBLIC KEY]
+
+Go to github → username on left top
+Click on Settings →Click on SSH & GPG keys option
+Click on New key button
+Copy paste the public key and save the changes
+
+Push your local repo to remote repo:
+$ git push -u origin main
+
+
+
+
+Scenario 3: Forking
+*****************
+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
+
+
+Step 1:
+
+fork Sonal0409/quarks-learning-react, so you can send a pull request.
+
+Step 2:
+
+Clone the repo in to local
+
+Step 3:
+
+Create a new branch for changes 
+
+step 4:
+
+push the chnages to the remote repo --> sonal0409 repo
+
+
+Step 5: Merge your changes from your github repo to Vishal git hub repo
+
+Raise a github pull request
+
+
+
+Scenario 5: rebasing
+**************
+
+git checkout feature_branch
+git rebase master
+
+Scenario 6: GIT TAGS
+**************
+
+git tag v1.1
+
+git log --oneline
+
+git tag -m "feb release" -a v1.0.1 <commitid>
+
+git tag --list
+
+git show <tagname>
+
+
+
+Scenario 7: git workflows
+****************
+
+GIT FLOW:
+***********
+
+Install
+
+ubuntu : apt-get update
+
+$ apt-get install gitflow
+
+
+Centos: 
+
+yum update
+
+yum install gitflow
+
+
+Amazon linux:
+
+amazon-linux-extras install epel
+
+yum install gitflow
+
+
+every command with tool gitflow
+
+3 types of branches
+
+ > feature
+ > release
+ > hotfix
+
+> git flow init
+
+ > create a local repo
+   > .git folder
+
+ > 2 branches
+
+   > main --> official release branch
+   > develop --> which serves as an integration branch for features
+
+ > Create a feature branch
+
+   $ git flow feature start login
+
+  $ git flow feature finish login
+
+> Create a release branch
+
+   $ git flow release start 0.1.0
+
+  $ git flow release finish login
+
+> Create a hotfix branch
+
+
+  $ $ git flow hotfix start hotfix0.1.0
+
+   $ git flow hotfix finish hotfix0.1.0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
