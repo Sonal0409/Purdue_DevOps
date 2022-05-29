@@ -358,7 +358,58 @@ every command with tool gitflow
 
 
 
+********************
+Git Stashing:
 
+$ git stash  ==> to stash changes
+
+$ git stash -p ==> interactive mode to stash only few changes
+
+$ git stash list ==> list the different chnages that have been stashed
+
+$ git stash show
+
+$ git show stash@{0}
+
+$ git stash pop stash@{0}  ==> delete the stash and bring chnages back to WD
+
+$ git stash apply stash@{0} ==> bring chnages back to WD and keep the stash as is
+
+
+
+Stash will be availble in .git/refs/stash
+
+
+
+Passwordless Authentication with GIT and GITHUB using SSH
+*******************************
+Remote repo: 
+GitHub : Create a remote repo
+Local repo (repo on local machine) -> to GitHub account (remote repo)
+
+Connect our local repo with the remote repo:
+
+$ git remote add origin git@github.com:Sonal0409/myproject21may.git
+Note: Here above URL is SSH url of remote repo
+$ git remote
+$ git remote -v
+
+Authorization:
+Connect your local machine with our github account using SSH:
+
+$ ssh-keygen
+[Press enter 3 times]
+
+$ cat ~/.ssh/id_rsa.pub
+[COPY THE PUBLIC KEY]
+
+Go to github → username on left top
+Click on Settings →Click on SSH & GPG keys option
+Click on New key button
+Copy paste the public key and save the changes
+
+Push your local repo to remote repo:
+$ git push -u origin main
 
 
 
