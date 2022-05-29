@@ -1,0 +1,23 @@
+A complete example demonstrating a Feature Branch Flow is as follows.
+
+ Assuming we have a repo setup with a main branch.
+
+git checkout main
+git checkout -b develop
+git checkout -b feature_branch
+# work happens on feature branch
+git checkout develop
+git merge feature_branch
+git checkout main
+git merge develop
+git branch -d feature_branch
+
+In addition to the feature and release flow, a hotfix example is as follows:
+
+git checkout main
+git checkout -b hotfix_branch
+# work is done commits are added to the hotfix_branch
+git checkout develop
+git merge hotfix_branch
+git checkout main
+git merge hotfix_branch
