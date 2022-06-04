@@ -125,6 +125,202 @@ when you build a dockerfile--> each instruciton will be built into a filesystem
 
 
 
+***********************************************************************************
+
+
+Networking in docker
+*****************
+There are 3 types of networks when working with single docker host
+
+> bridge
+> host
+> None
+
+To check your networks:
+
+$ docker network ls
+
+To Hceck containers created in a network:
+
+$ docker inspect <netwrokName>
+
+Sceanrio 1:
+****************************
+Create 2 containers and Check their network and see if they can communicate with each other
+
+
+Container 1:
+
+ docker run -itd --name c1 busybox
+
+c1 : 172.17.0.2
+
+Container 2:
+
+ docker run -itd --name c2 busybox
+
+c2: 172.17.0.3
+
+** When containers are in Same network they can communicate with each other
+
+
+Scenario 2:
+******************
+Create your custom netwrok of driver type - bridge
+
+docker network create --driver bridge edureka1
+
+docker network create --driver bridge edureka2
+
+docker network ls
+
+Scenario 3:
+*******************
+
+Create 2 busybox Containers in network edureka1, and check if they can communicate
+
+ docker run --name b1 -itd --network edureka1 busybox
+ docker run --name b2 -itd --network edureka1 busybox
+
+b1: 172.18.0.2
+
+b2: 172.18.0.3
+
+Both are in same network edureka1 ==> they can communicate with each other
+
+
+Scenario 4:
+*******************
+
+Create 1 busybox Containers in network edureka2, and check if it can communicate with container in edureka1
+
+
+ docker run --name b3 -itd --network edureka2 busybox
+
+b3 : 172.19.0.2
+
+b1 cannot communictae with b3-- different network
+
+
+Scenario 5:
+*************
+
+Place the container in both the networks edureka1 and edureka2
+
+
+$ docker network connect edureka2 b2
+
+
+
+
+Scenario 6:
+******************
+
+
+Install a tool - Docker-compose:
+
+systemctl start docker
+
+curl -SL https://github.com/docker/compose/releases/download/v2.5.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+
+sudo chmod +x /usr/local/bin/docker-compose
+
+
+We write a docker-compose files
+
+this file is written in YAML
+
+purpose of compose file is to create multiple containers from multiple Images at the same time
+
+Delete all the created containers
+
+
+Create & Delete container at once.. using a command only if they create using docker-compose tool
+
+
+Whenever you will exeucte creation of contaienr from docker-compose
+
+a defualt networks - bridge will get created
+
+in this network your container will be placed
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
