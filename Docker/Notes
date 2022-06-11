@@ -246,7 +246,24 @@ in this network your container will be placed
 
 
 
+**********************************
 
+Volumes in Swarm:
+**************
+
+Storage of Container data in SWARM
+
+Named volumes will be created in SWARM
+
+option used is  : --mount
+
+source: Name of the volume, which will get created in the same node as that of replicas
+
+target: directory path of container whose data has to be preserved.
+
+Command:
+
+docker service create --name myservice --mount type=volume,source=myvol1,target=/mypath --replicas 3 nginx
 
 
 
