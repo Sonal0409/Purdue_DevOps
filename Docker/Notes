@@ -248,6 +248,54 @@ in this network your container will be placed
 
 **********************************
 
+To initiate docker swarm:
+
+$ docker swarm init
+
+It will generate a token , copy token on ervery worker node for them to join the cluster
+
+$ docker swarm join-token worker
+
+To see various nodes in the cluster:
+
+$ docker node ls
+
+Object in Swarm that will create replicas of an Image:
+*************
+Service :will create replicas of an Image
+
+SWARM : RAFT algorithm  will distribute the replicas to various node in the cluster
+
+Create a Service in SWARM:
+*******************
+
+$ docker service create --name svc1 --replicas 4 nginx
+
+List service in cluster
+
+docker service ls
+
+docker service ps mysvc1
+
+Scale up and scale down replicas:
+***************
+
+$ docker service scale mysvc=4
+
+
+
+Service when created will create multiple replicas, but how we can access it form browser
+************
+
+port mapping
+
+
+1. Create a service of replicas 4 of image sonal04/samplepyapp:v1 and do port mapping
+
+ $ docker service create --name mysvc -p 8181:3000 --replicas 4 sonal04/samplepyapp:v1
+
+
+
 Volumes in Swarm:
 **************
 
